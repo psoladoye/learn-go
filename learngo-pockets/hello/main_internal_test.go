@@ -11,39 +11,34 @@ func Example_main() {
 	// Hello, World!
 }
 
-func TestGreet_English(t *testing.T) {
-	// Arrange
-	want := "Hello, World!"
-	lang := language("en")
+func TestGreet(t *testing.T) {
+	type testCase struct {
+		lang language
+		want string
+	}
 
-	// Act
-	got := greet(lang)
+	var tests = map[string]testCase {
+		"English": {
+			lang: "en",
+			want: "Hello, World!",
+		},
+		"French": {
+			lang: "fr",
+			want: "Bonjour le monde",
+		},
+		"Unknown": {
+			lang: "un",
+			want: "",
+		},
+	}
 
-	// Assert
-	assert.Equal(t, got, want)
-}
+	for name, tc := range tests {
+		t.Run(name, func(t * testing.T) {
+			// Act
+			got := greet(tc.lang)
 
-func TestGreet_French(t *testing.T) {
-	// Arrage
-	lang := language("fr")
-	want := "Bonjour le monde"
-
-	// Act
-	got := greet(lang)
-
-	// Assert
-	assert.Equal(t, want, got)
-
-}
-
-func TestGreet_Unknown(t *testing.T) {
-	// Arrange
-	lang := language("un")
-	want := ""
-
-	// Act
-	got := greet(lang)
-
-	// Assert
-	assert.Equal(t, want, got)
+			// Assert
+			assert.Equal(t, tc.want, got)
+		})
+	}
 }
