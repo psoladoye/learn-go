@@ -16,5 +16,9 @@ func main() {
         return
     }
 
-    fmt.Printf("first entry %v", bookworms[0])
+    commonBooks := findCommonBooks(bookworms)
+
+    for i := range commonBooks {
+        fmt.Printf("index=%d, book.name=%s\n", i,commonBooks[i].Title)
+    }
 }

@@ -52,6 +52,7 @@ func TestLoadBookworms(t *testing.T) {
             // Act
             got, err := loadBookworms(tc.filepath)
 
+			// Assert
             if tc.wantErr {
 				assert.Nil(t, got)
                 require.Error(t, err)

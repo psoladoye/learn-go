@@ -1,7 +1,7 @@
 package main
 
 import (
-    "encoding/json"
+	"encoding/json"
 	"os"
 )
 
@@ -24,10 +24,34 @@ func loadBookworms(filepath string) ([]Bookworm, error) {
 	}
 	defer f.Close()
 
-    var bookworms []Bookworm
-    err = json.NewDecoder(f).Decode(&bookworms)
-    if err != nil {
-        return nil, err
-    }
+	var bookworms []Bookworm
+	err = json.NewDecoder(f).Decode(&bookworms)
+	if err != nil {
+		return nil, err
+	}
 	return bookworms, nil
+}
+
+// findCommonBooks returns books that are on more than one bookworms shelf.
+func findCommonBooks(bookworms []Bookworm) []Book {
+	type tracker struct {
+		book  Book
+		times int
+	}
+
+	register := map[string]tracker{}
+	commonBooks := []Book{}
+
+	for _, bw := range bookworms {
+		for _, b := range bw.Books {
+			t, exists := register[b.Title]
+			if exists {
+				register[b.Title] = tracker{ book: b, times: t.times + 1}
+				commonBooks = append(commonBooks, b)
+			} else {
+				register[b.Title] = tracker{ book: b, times: 1}
+			}
+		}
+	}
+	return commonBooks
 }
