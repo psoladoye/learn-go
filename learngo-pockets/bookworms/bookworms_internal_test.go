@@ -62,3 +62,7 @@ func TestLoadBookworms(t *testing.T) {
         })
     }
 }
+
+func TestFindCommonBooks(t *testing.T) {
+	// Arrange
+}

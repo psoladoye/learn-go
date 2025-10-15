@@ -25,8 +25,8 @@ func loadBookworms(filepath string) ([]Bookworm, error) {
 	defer f.Close()
 
 	var bookworms []Bookworm
-	err = json.NewDecoder(f).Decode(&bookworms)
-	if err != nil {
+	
+	if err = json.NewDecoder(f).Decode(&bookworms); err != nil {
 		return nil, err
 	}
 	return bookworms, nil
@@ -44,8 +44,7 @@ func findCommonBooks(bookworms []Bookworm) []Book {
 
 	for _, bw := range bookworms {
 		for _, b := range bw.Books {
-			t, exists := register[b.Title]
-			if exists {
+			if t, exists := register[b.Title]; exists {
 				register[b.Title] = tracker{ book: b, times: t.times + 1}
 				commonBooks = append(commonBooks, b)
 			} else {
