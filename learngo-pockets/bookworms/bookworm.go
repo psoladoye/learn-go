@@ -46,7 +46,9 @@ func findCommonBooks(bookworms []Bookworm) []Book {
 		for _, b := range bw.Books {
 			if t, exists := register[b.Title]; exists {
 				register[b.Title] = tracker{ book: b, times: t.times + 1}
-				commonBooks = append(commonBooks, b)
+				if t.times == 1 {
+					commonBooks = append(commonBooks, b)
+				}
 			} else {
 				register[b.Title] = tracker{ book: b, times: 1}
 			}
