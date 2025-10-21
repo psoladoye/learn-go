@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"sort"
 )
 
 type Book struct {
@@ -54,5 +56,24 @@ func findCommonBooks(bookworms []Bookworm) []Book {
 			}
 		}
 	}
-	return commonBooks
+	return sortBooks(commonBooks)
+}
+
+// sortBooks sorts the books first by Author then Title.
+func sortBooks(books []Book) []Book {
+	sort.Slice(books, func(i, j int) bool {
+		if books[i].Author != books[j].Author {
+			return books[i].Author < books[j].Author
+		}
+		return books[i].Title < books[j].Title
+	})
+	
+	return books
+}
+
+// displayBooks prints out the titles and authors of a list of books
+func displayBooks(books []Book) {
+	for _, b := range books {
+		fmt.Printf("- %s by %s \n", b.Title, b.Author)
+	}
 }
