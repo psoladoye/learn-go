@@ -61,13 +61,7 @@ func findCommonBooks(bookworms []Bookworm) []Book {
 
 // sortBooks sorts the books first by Author then Title.
 func sortBooks(books []Book) []Book {
-	sort.Slice(books, func(i, j int) bool {
-		if books[i].Author != books[j].Author {
-			return books[i].Author < books[j].Author
-		}
-		return books[i].Title < books[j].Title
-	})
-	
+	sort.Sort(byAuthor(books))
 	return books
 }
 
@@ -76,4 +70,25 @@ func displayBooks(books []Book) {
 	for _, b := range books {
 		fmt.Printf("- %s by %s \n", b.Title, b.Author)
 	}
+}
+
+// byAuthor is a list of Book.
+// Definig a custom type to implement the interface
+type byAuthor []Book
+
+// Len implements the sort.Interface by returning the length of the BookByAuthor
+func (b byAuthor) Len() int { return len(b) }
+
+// Swap implements the sort.Interface and swaps two books.
+func (b byAuthor) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
+}
+
+// Less implements sort.Interface and returns
+// books sorted by Author and Title.
+func (b byAuthor) Less(i, j int) bool {
+	if b[i].Author != b[j].Author {
+		return b[i].Author < b[j].Author
+	}
+	return b[i].Title < b[j].Title
 }

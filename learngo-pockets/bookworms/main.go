@@ -3,6 +3,7 @@ package main
 import (
     "flag"
     "fmt"
+    "sort"
 )
 
 func main() {
@@ -18,6 +19,16 @@ func main() {
 
     commonBooks := findCommonBooks(bookworms)
 
-    fmt.Println("Here are the books in common:")
+    books := []Book{
+        { Author: "C", Title: "3" },
+        { Author: "A", Title: "1" },
+        { Author: "B", Title: "2" },
+        { Author: "B", Title: "3" },
+    }
+
+    sort.Sort(byAuthor(books))
+    displayBooks(books)
+
+    fmt.Println("\nHere are the books in common:")
     displayBooks(commonBooks)
 }
