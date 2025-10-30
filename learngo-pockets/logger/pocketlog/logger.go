@@ -1,46 +1,72 @@
 package pocketlog
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+	"os"
+)
 
 // Logger is used to log information
 type Logger struct {
-    threshold Level
+	threshold Level
+	output    io.Writer
 }
 
 // New returns you a logger, ready to log at the required threshold.
-func New(threshold Level) *Logger {
-    return &Logger{
-        threshold: threshold,
+// The default output is Stdout.
+func New(threshold Level, output io.Writer) *Logger {
+	return &Logger{
+		threshold: threshold,
+        output: output,
+	}
+}
+
+// ensureOutput sets a default output to Stdout.
+func (l *Logger) ensureOutput() {
+    if l.output == nil {
+        l.output = os.Stdout
     }
 }
 
+// logf prints the message to the output.
+// Add decorations here, if any.
+func (l *Logger) logf(format string, args ...any) {
+    _, _ = fmt.Fprintf(l.output, format + "\n", args...)
+}
 
 // Debugf formats and prints a message if the log level is debug or higher.
 func (l *Logger) Debugf(format string, args ...any) {
-    if l.threshold > LevelDebug {
-        return
-    }
+    l.ensureOutput()
+	if l.threshold > LevelDebug {
+		return
+	}
 
-    fmt.Printf(format + "\n", args...)
+	l.logf(format, args)
 }
 
 // Infof formats and prints a message if the log level is info or higher.
 func (l *Logger) Infof(format string, args ...any) {
-    if l.threshold > LevelInfo {
-        return
-    }
+    l.ensureOutput()
+	if l.threshold > LevelInfo {
+		return
+	}
+    l.logf(format, args)
 }
 
 // Warnf formats and prints a message if the log level is warn or higher.
 func (l *Logger) Warnf(format string, args ...any) {
-    if l.threshold > LevelWarn {
-        return
-    }
+    l.ensureOutput()
+	if l.threshold > LevelWarn {
+		return
+	}
+    l.logf(format, args)
 }
 
 // Errorf formats and prints a message if the log level if error or higher.
 func (l *Logger) Errorf(format string, args ...any) {
-    if l.threshold > LevelError {
-        return
-    }
+    l.ensureOutput()
+	if l.threshold > LevelError {
+		return
+	}
+    l.logf(format, args)
 }

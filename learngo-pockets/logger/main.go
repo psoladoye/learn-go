@@ -1,12 +1,12 @@
 package main
 
 import (
-    "fmt"
-    "learngo-pockets/logger/pocketlog"
+	"learngo-pockets/logger/pocketlog"
+	"os"
 )
 
 func main() {
-    var log pocketlog.Logger
+    log := pocketlog.New(pocketlog.LevelDebug, os.Stderr)
 
-    fmt.Printf("logger = %v", log)
+    log.Debugf("Hello", "pish")
 }
