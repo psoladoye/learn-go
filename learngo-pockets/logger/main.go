@@ -3,10 +3,14 @@ package main
 import (
 	"learngo-pockets/logger/pocketlog"
 	"os"
+    "time"
 )
 
 func main() {
-    log := pocketlog.New(pocketlog.LevelDebug, os.Stderr)
+    lgr := pocketlog.New(pocketlog.LevelDebug, pocketlog.WithOutput(os.Stderr))
+    lgr.Infof("A little copying is better than a little dependency.")
+    lgr.Errorf("Errors are values. Documentation is for %s.", "users")
+    lgr.Debugf("Make the zero (%d) value useful.", 0)
 
-    log.Debugf("Hello", "pish")
+    lgr.Infof("Hallo, %d %v", 2022, time.Now())
 }
